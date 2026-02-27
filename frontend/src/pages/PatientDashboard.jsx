@@ -4,7 +4,8 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import DrAIButton from '../components/DrAIButton';
 
-const API = axios.create({ baseURL: 'http://localhost:8000' });
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API = axios.create({ baseURL: API_BASE });
 
 const TIPS = [
     'Drink at least 8 glasses of water daily.',
@@ -361,7 +362,7 @@ function RecordsSection({ patientId, token }) {
 
     const downloadFile = (id, fname) => {
         const a = document.createElement('a');
-        a.href = `http://localhost:8000/medical-records/download/${id}`;
+        a.href = `${API_BASE}/medical-records/download/${id}`;
         a.download = fname; a.click();
         toast.success(`Downloading ${fname}`);
     };
@@ -443,7 +444,7 @@ function LabSection({ patientId, token }) {
                             </p>
                         </div>
                         {r.file_name && (
-                            <a href={`http://localhost:8000/lab/download/${r.id}`}
+                            <a href={`${API_BASE}/lab/download/${r.id}`}
                                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 hover:bg-sky-100 text-xs font-medium border border-sky-200 dark:border-sky-700 transition-colors">
                                 ⬇ {r.file_name.length > 20 ? r.file_name.slice(0, 20) + '...' : r.file_name}
                             </a>
